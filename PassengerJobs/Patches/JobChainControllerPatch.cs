@@ -24,8 +24,16 @@ namespace PassengerJobs.Patches
             if (__instance is PassengerChainController)
             {
                 var trainCars = __instance.carsForJobChain.Select(lc => TrainCarRegistry.Instance.logicCarToTrainCar[lc]).ToList();
-                CarSpawner.Instance.DeleteTrainCars(trainCars, true);
-                __instance.carsForJobChain.Clear();
+                // Do not delete cars if Persistent Jobs is present and leave the handling up to it
+                if (PJMain.PersistentJobsCompat)
+                {
+                    PJMain.Log($"Consist from job {__instance.currentJobInChain.ID} is now jobless");
+                }
+                else
+                {
+                    CarSpawner.Instance.DeleteTrainCars(trainCars, true);
+                    __instance.carsForJobChain.Clear();
+                }
             }
         }
     }

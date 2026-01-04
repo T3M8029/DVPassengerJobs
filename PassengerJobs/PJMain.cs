@@ -20,6 +20,7 @@ namespace PassengerJobs
         public static UnityModManager.ModEntry ModEntry { get; private set; } = null!;
         public static PJModSettings Settings { get; private set; } = null!;
         public static bool Enabled => ModEntry.Active;
+        public static bool PersistentJobsCompat = false;
         public static TranslationInjector Translations { get; internal set; } = null!;
 
 
@@ -53,6 +54,7 @@ namespace PassengerJobs
             ModEntry.OnSaveGUI = SaveGUI;
 
             // Find companion mods
+            PersistentJobsCompat = UnityModManager.modEntries.Any(m => m.Info.Id == "PersistentJobsMod" && m.Enabled);
             //SkinManager_Patch.Initialize();
 
             DV.Globals.G.Types.RecalculateCaches();

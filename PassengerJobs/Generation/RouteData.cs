@@ -126,9 +126,9 @@ namespace PassengerJobs.Generation
             Station = station;
             MinLength = minLength;
 
-            Tracks = station.GetPlatforms(isFinal)
-                .GetUnusedTracks()
-                .Where(t => t.Length >= (minLength + YardTracksOrganizer.END_OF_TRACK_OFFSET_RESERVATION));
+            // Persistent Jobs has it´s own system for reserving space on tracks - no need for track to be completly empty, leave it up to it
+            var platforms = station.GetPlatforms(isFinal);
+            Tracks = (PJMain.PersistentJobsCompat ? platforms : platforms.GetUnusedTracks()).Where(t => t.Length >= (minLength + YardTracksOrganizer.END_OF_TRACK_OFFSET_RESERVATION));
 
             //return ((float)unused.Count() / tracks.Count) + ();
             Weight = Tracks.Any() ? 1 : 0;

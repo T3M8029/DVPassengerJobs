@@ -171,7 +171,7 @@ namespace PassengerJobs.Patches
             jobDefinition.TrainCarsToTransport = consist;
 
             string dests = string.Join(", ", destTracks.Select(t => t.DisplayID));
-            PJMain.Log($"Loaded job definition {jobDefinition.forcedJobId}: {jobDefinition.RouteType} {jobDefinition.StartingTrack} {dests}");
+            PJMain.Log($"Loaded job definition {jobDefinition.forcedJobId}: {jobDefinition.RouteType} {jobDefinition.StartingTrack.Value.DisplayID} — {dests}");
 
             return jobDefinition;
         }

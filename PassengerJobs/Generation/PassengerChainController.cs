@@ -50,11 +50,15 @@ namespace PassengerJobs.Generation
                     {
                         PJMain.Warning($"Failed to create new chain with cars from job {lastJobInChain.ID}");
 
-                        var trainCars = carsForJobChain.Select(lc => TrainCarRegistry.Instance.logicCarToTrainCar[lc]).ToList();
-                        SingletonBehaviour<CarSpawner>.Instance.DeleteTrainCars(trainCars, true);
+                        // Only delete cars if Persistent Jobs is not present, otherwise leave the handling up to it
+                        if (!PJMain.PersistentJobsCompat)
+                        {
+                            var trainCars = carsForJobChain.Select(lc => TrainCarRegistry.Instance.logicCarToTrainCar[lc]).ToList();
+                            SingletonBehaviour<CarSpawner>.Instance.DeleteTrainCars(trainCars, true);
+                            carsForJobChain.Clear();
+                        } 
                     }
-
-                    carsForJobChain.Clear();
+                    else carsForJobChain.Clear();
                 }
             }
             else
